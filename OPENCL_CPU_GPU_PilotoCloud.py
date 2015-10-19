@@ -126,7 +126,7 @@ if __name__ == '__main__':
         context, device = CreateContext();
         if context == None:
             print "Failed to create OpenCL context."
-        sys.exit(1)
+            sys.exit(1)
         t5 = time.clock()
         print t5 - t4, " Create Context..."
         # Create a command-queue on the first device available
@@ -161,7 +161,7 @@ if __name__ == '__main__':
         t10 = time.clock()
         print t10 - t9, " Create Sampler..."
         # Create OpenCL program
-        program = CreateProgram(context, device, "ImageFilter_mac.cl")
+        program = CreateProgram(context, device, "/home/ImageFilter_mac.cl")
         t11 = time.clock()
         print t11 - t10, "Create Program..."
         globalWorkSize = (imgSize[0],imgSize[1])
