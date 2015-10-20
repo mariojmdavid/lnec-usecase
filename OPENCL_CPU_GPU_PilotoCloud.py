@@ -10,16 +10,16 @@ import numpy as np
 t0 = time.clock()
 
 def scale_img(img, type):
-    n_colors={"8": 255., "16": 65536. ,"32": 1.}
+    n_colors = {"8": 255., "16": 65536. ,"32": 1.}
     if type == 8:
-        out_type=np.uint8
+        out_type = np.uint8
     elif type == 16:
-        out_type=np.uint16
+        out_type = np.uint16
     elif type == 32:
-        out_type=np.float32
+        out_type = np.float32
     else:
         print "ERROR! Check <type> argument!!!"
-        img_new=np.array(img*n_colors[str(type)]/img.max(),dtype=out_type)
+    img_new = np.array(img*n_colors[str(type)]/img.max(), dtype=out_type)
     return img_new
 
 
