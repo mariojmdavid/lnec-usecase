@@ -7,5 +7,5 @@ docker run \
     --device=/dev/nvidiactl:/dev/nvidiactl \
     --device=/dev/nvidia-uvm:/dev/nvidia-uvm \
     -v ${CDIR}:/home \
-    ubuntu_pyopencl time python /home/OPENCL_CPU_GPU_PilotoCloud.py /home/Obidos_2.png /home/Out.png GPU 1
+    ubuntu_pyopencl time python /home/OPENCL_CPU_GPU_PilotoCloud.py /home/ImageFilter_mac.cl /home/Obidos_2.png /home/Out.png GPU 1
 

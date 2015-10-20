@@ -115,11 +115,14 @@ def RoundUp(groupSize, globalSize):
 
 if __name__ == '__main__':
     t3 = time.clock()
-    if len(sys.argv) != 5:
-        use = " <inputImageFile> <outputImageFile> <device:CPU/GPU> <ntimes>"
+    if len(sys.argv) != 6:
+        use = " <FilterCLfile> <inputImageFile> <outputImageFile> <device:CPU/GPU> <ntimes>"
         sys.exit("USAGE: " + sys.argv[0] + use)
-    device = sys.argv[3]
-    ntimes = np.int(sys.argv[4])
+    filterCL = sys.argv[1]
+    inFile = sys.argv[2]
+    outFile = sys.argv[3]
+    device = sys.argv[4]
+    ntimes = np.int(sys.argv[5])
     if device == "GPU":
         t4 = time.clock()
         # Create an OpenCL context on first available platform
@@ -141,7 +144,7 @@ if __name__ == '__main__':
         t7 = time.clock()
         # Load input image from file and load it into an OpenCL image object
         imageObjects = [ 0, 0, 0]
-        imageObjects[0], imgSize , IMG_1 = LoadImage(context, sys.argv[1])
+        imageObjects[0], imgSize , IMG_1 = LoadImage(context, inFile)
         t8 = time.clock()
         print t8 - t7, " Load Image..."
         # Create output1 image object
@@ -161,7 +164,7 @@ if __name__ == '__main__':
         t10 = time.clock()
         print t10 - t9, " Create Sampler..."
         # Create OpenCL program
-        program = CreateProgram(context, device, "/home/ImageFilter_mac.cl")
+        program = CreateProgram(context, device, filterCL)
         t11 = time.clock()
         print t11 - t10, "Create Program..."
         globalWorkSize = (imgSize[0],imgSize[1])
@@ -185,10 +188,10 @@ if __name__ == '__main__':
                 m, n = 1, 2
             else:
                 m, n = 2, 1
-        program.blur_filter(commandQueue, globalWorkSize, None,
-			             imageObjects[m], imageObjects[n], sampler,
-			             np.int32(imgSize[0]),
-			             np.int32(imgSize[1])).wait()
+            program.blur_filter(commandQueue, globalWorkSize, None,
+                                imageObjects[m], imageObjects[n], sampler,
+                                np.int32(imgSize[0]),
+                                np.int32(imgSize[1])).wait()
         t13=time.clock()
         print t13 - t12, " Run Kernel..."
         t14 = time.clock()
@@ -204,7 +207,7 @@ if __name__ == '__main__':
 
     else: ## device == CPU
         t4 = time.clock()
-        im = Image.open(sys.argv[1])
+        im = Image.open(inFile)
         img = np.array(im)
         IMG_1 = scale_img(img, 8)
         img1 = Image.fromarray(IMG_1)
